@@ -22,7 +22,6 @@ function App() {
         <SecaoHabitos habits={habits} />
         <Footer />
       </div>
-      
   )
 }
 
