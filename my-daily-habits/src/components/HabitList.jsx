@@ -1,19 +1,40 @@
 // src/components/HabitList.jsx
-import { useState } from 'react'
+// Passo 1 = Montagem
+import { useEffect, useState } from 'react'
 import HabitCard from './HabitCard'
 function HabitList() {
-    const [habits, setHabits] = useState([
-    { id: 1, nome: 'Exercicio', descricao: 'Treino de força', meta: 5, ativo: true, diasFeitos: 5 },
-    { id: 2, nome: 'Leitura', descricao: 'Livro ou artigo', meta: 7, ativo: true, diasFeitos: 3 },
-    { id: 3, nome: 'Meditação', descricao: 'Respiração e foco', meta: 7, ativo: false, diasFeitos: 0 },
-    { id: 4, nome: 'Hidratação', descricao: 'Beber 2 litros de água', meta: 7, ativo: true, diasFeitos: 6 },
-    ])
+    const [habits, setHabits] = useState(() => {
+        const stored = localStorage.getItem('my-daily-habits')
+        if (!stored) return [
+            { id: 1, nome: 'Exercicio', descricao: 'Treino de força', meta: 5, ativo: true, diasFeitos: 5 },
+            { id: 2, nome: 'Leitura', descricao: 'Livro ou artigo', meta: 7, ativo: true, diasFeitos: 3 },
+            { id: 3, nome: 'Meditação', descricao: 'Respiração e foco', meta: 7, ativo: false, diasFeitos: 0 },
+            { id: 4, nome: 'Hidratação', descricao: 'Beber 2 litros de água', meta: 7, ativo: true, diasFeitos: 6 },
+        ]
+        try {
+            return JSON.parse(stored)
+        } catch {
+            return []
+        }})
+        const limparHistorico = () => {
+            localStorage.removeItem('my-daily-habits')
+            setHabits([
+                { id: 1, nome: 'Exercicio', descricao: 'Treino de força', meta: 5, ativo: true, diasFeitos: 5 },
+                { id: 2, nome: 'Leitura', descricao: 'Livro ou artigo', meta: 7, ativo: true, diasFeitos: 3 },
+                { id: 3, nome: 'Meditação', descricao: 'Respiração e foco', meta: 7, ativo: false, diasFeitos: 0 },
+                { id: 4, nome: 'Hidratação', descricao: 'Beber 2 litros de água', meta: 7, ativo: true, diasFeitos: 6 },
+            ])
+        }
+    <button onClick={limparHistorico}>Limpar Histórico</button>
     const removerHabit = (id) => {
-        setHabits(habits.filter(habit => habit.id !== id))
-    }
+        setHabits(habits.filter(habit => habit.id !== id))}
     const [novoNome, setNovoNome] = useState('')
     const [novaDescricao, setNovaDescricao] = useState('')
     const [novaCategoria, setNovaCategoria] = useState('')
+    useEffect(() => {
+        localStorage.setItem('my-daily-habits', JSON.stringify(habits))
+    }, [habits])
+    useEffect(() => [])
     const adicionarHabit = (event) => {
         event.preventDefault()
         if (!novoNome.trim()) {
