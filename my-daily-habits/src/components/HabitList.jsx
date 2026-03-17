@@ -16,6 +16,10 @@ function HabitList() {
         } catch {
             return []
         }})
+        useEffect(() => {
+            localStorage.setItem('my-daily-habits', JSON.stringify(habits))
+        }, [habits])
+        useEffect(() => [])
         const limparHistorico = () => {
             localStorage.removeItem('my-daily-habits')
             setHabits([
@@ -31,10 +35,6 @@ function HabitList() {
     const [novoNome, setNovoNome] = useState('')
     const [novaDescricao, setNovaDescricao] = useState('')
     const [novaCategoria, setNovaCategoria] = useState('')
-    useEffect(() => {
-        localStorage.setItem('my-daily-habits', JSON.stringify(habits))
-    }, [habits])
-    useEffect(() => [])
     const adicionarHabit = (event) => {
         event.preventDefault()
         if (!novoNome.trim()) {
@@ -109,5 +109,6 @@ function HabitList() {
         </section>
     )
 }
+
 
 export default HabitList
